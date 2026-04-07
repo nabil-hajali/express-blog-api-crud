@@ -1,9 +1,9 @@
 const express = require('express');
 const app = express();
-const postsRouter = require('./routers/posts');
-const PORT = process.env.PORT || 3001;
+const postsRouter = require('./controllers/postController');
+const PORT = process.env.PORT || 3000;
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static( 'public'));
 
 
 
