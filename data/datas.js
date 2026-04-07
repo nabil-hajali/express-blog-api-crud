@@ -1,4 +1,4 @@
-const posts = [
+const datas = [
   {
     id: 1,
     title: 'Benvenuto al mio blog',
@@ -35,3 +35,6 @@ const posts = [
     tags: ['update','news']
   }
 ];
+
+
+module.exports = datas;

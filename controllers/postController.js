@@ -1,53 +1,70 @@
-const express = require('express');
-const router = express.Router();
-
-
-
-
-// server entry point
-router.get('/', (req, res) => {
-  res.send('Server del mio blog');
-});
-
+const datas = require('../data/datas');
 
 // Index
-router.get('/', (req, res) => {
-  res.json({ posts });
-});
+const index = (req, res) => {
+  const reqTag = req.query?.tag;
 
-// Show
-router.get('/:id', (req, res) => {
-  const postId = parseInt(req.params.id);
-  const post = posts.find(p => p.id === postId);
-  if (post) {
-    res.json({ post });
-  } else {
-    res.status(404).json({ error: 'Post non trovato' });
+  if (reqTag == undefined) {
+    return res.json(datas);
   }
 
+  const filteredPosts = datas.filter((post) => Array.isArray(post.tags) && post.tags.includes(reqTag));
 
-  // Store
-  router.post('/', (req, res) => {
-    res.send('Create new post');
-  });
+  if (filteredPosts.length === 0) {
+    return res.json('No results found');
+  }
 
+  return res.json(filteredPosts);
+};
 
+// Show
+const show = (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const post = datas.find((p) => p.id === id);
 
+  if (!post) {
+    return res.status(404).json({
+      error: 'Not found',
+      message: 'post not found'
+    });
+  }
 
-  // Update
-  router.put('/:id', (req, res) => {
-    res.send(`Update post with id ${req.params.id}`);
-  });
+  return res.json(post);
+};
 
-  // Modify
-  router.patch('/:id', (req, res) => {
-    res.send(`Modify post with id ${req.params.id}`);
-  });
+// Store
+const store = (req, res) => {
+  res.send('New post');
+};
 
-  // Destroy
-  router.delete('/:id', (req, res) => {
-    res.send(`Delete post with id ${req.params.id}`);
-  });
-});
+// Update
+const update = (req, res) => {
+  res.send(`post ${req.params.id} updated`);
+};
 
-module.exports = router;
+// Modify
+const modify = (req, res) => {
+  res.send(`post ${req.params.id} modified`);
+};
+
+// Destroy
+const destroy = (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const post = datas.find((p) => p.id == id);
+
+  if (!post) {
+    return res.status(404).json({
+      error: 'Not found',
+      message: 'post not found'
+    });
+  }
+
+  datas.splice(datas.indexOf(post), 1);
+  console.log(datas);
+
+  return res.sendStatus(204);
+};
+
+module.exports = {
+  index, show, store, update, modify, destroy,
+};
