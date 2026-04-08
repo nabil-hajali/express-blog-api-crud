@@ -29,12 +29,34 @@ const show = (req, res) => {
     });
   }
 
-  return res.json(post);
+  return res.json(datas);
 };
 
 // Store
 const store = (req, res) => {
-  res.send('New post');
+
+  //create a new post id
+  const newId = datas.length > 0 ? datas[datas.length - 1].id + 1 : 1;
+
+
+  //destructure the name and content from the request body
+  const { name, content } = req.body;
+
+  //create a new post object
+  const newPost = {
+    id: newId,
+    name,
+    content
+  };
+
+  //add the new post to the posts array
+  datas.push(newPost);
+
+  console.log(datas);
+  
+
+ //return the new post as a response
+  res.status(201).json(newPost);
   console.log(req.body);
   
 };
