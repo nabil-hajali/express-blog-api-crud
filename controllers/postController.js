@@ -40,30 +40,56 @@ const store = (req, res) => {
 
 
   //destructure the name and content from the request body
-  const { name, content } = req.body;
+  const { name, title, content, image } = req.body;
 
   //create a new post object
   const newPost = {
     id: newId,
+    title,
     name,
-    content
+    content,
+    image
   };
 
   //add the new post to the posts array
   datas.push(newPost);
 
-  console.log(datas);
-  
+  //console.log(datas);
 
- //return the new post as a response
+
+  //return the new post as a response
   res.status(201).json(newPost);
   console.log(req.body);
-  
+
 };
 
 // Update
 const update = (req, res) => {
-  res.send(`post ${req.params.id} updated`);
+
+  //get the post id from the req and pars to a number
+  const id = parseInt(req.params.id);
+
+  //use find to get the post with the same id from the posts array
+  const post = datas.find((p) => p.id === id);
+
+  //if the post is not found return a 404 error
+  if (!post) {
+    return res.status(404).json({
+      error: 'Not found',
+      message: 'post not found'
+    });
+  }
+
+  //if the post is found update the name and content with the values from the request body
+  const { name, title, content, image } = req.body;
+  post.name = name;
+  post.title = title;
+  post.content = content;
+  post.image = image;
+
+  //respond with the updated post
+
+  res.json(post);
 };
 
 // Modify
