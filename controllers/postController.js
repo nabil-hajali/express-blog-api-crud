@@ -35,6 +35,8 @@ const show = (req, res) => {
 // Store
 const store = (req, res) => {
   res.send('New post');
+  console.log(req.body);
+  
 };
 
 // Update
