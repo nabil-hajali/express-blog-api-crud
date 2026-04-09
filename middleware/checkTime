@@ -1,0 +1,16 @@
+function checkTime(req, res, next) {
+  const currentHour = new Date().getHours();
+
+  if (currentHour < 9 || currentHour >= 17) {
+    return res.status(403).json({
+      error: 'Forbidden',
+      message: 'Access is allowed only between 9 AM and 5 PM'
+    });
+  }
+  console.log(`log at ${currentHour}`);
+  
+
+  next();
+}
+
+module.exports = checkTime;
